@@ -1,7 +1,6 @@
 package com.rwc.randomwordchat.handler;
 
 import com.rwc.randomwordchat.model.message.model.Message;
-import com.rwc.randomwordchat.model.message.model.MessageUtil;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -50,10 +49,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         TextMessage textMessage = new TextMessage(content);
         sessions.values().forEach(s -> {
             try {
-                if(!s.getId().equals(sessionId)) {
-                    s.sendMessage(textMessage);
-                    log.info("전송에 성공하였습니다.");
-                }
+                s.sendMessage(textMessage);
+                log.info("전송에 성공하였습니다.");
             }
             catch (Exception e){
             }
