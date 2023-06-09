@@ -1,16 +1,18 @@
 package com.rwc.randomwordchat.model.chat.model.dto;
 
 import com.rwc.randomwordchat.model.chat.model.service.ChatService;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Getter
+@Log4j2
+@ToString
 public class ChatRoom {
 
     private String roomId;
@@ -26,7 +28,9 @@ public class ChatRoom {
     public void handleActions(WebSocketSession session, ChatMessage chatMessage, ChatService chatService) {
         if(chatMessage.getType().equals("new")) {
             sessions.add(session);
+            log.info("{} 님이 입장하셨습니다.", chatMessage.getSender());
             chatMessage.setMessage(chatMessage.getSender() + "님이 입장하셨습니다.");
+            log.info("sessions : {}", sessions.toString());
         }
 
         sendMessage(chatMessage, chatService);

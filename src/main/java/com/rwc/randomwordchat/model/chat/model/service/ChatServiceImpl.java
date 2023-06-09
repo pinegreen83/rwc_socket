@@ -27,7 +27,9 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public List<ChatRoom> findAllRoom() {
-        return new ArrayList<>(chatRooms.values());
+        List<ChatRoom> list = new ArrayList<>(chatRooms.values());
+        log.info("찾은 모든 방들 : {}", list.toString());
+        return list;
     }
 
     @Override
@@ -37,11 +39,13 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public ChatRoom createRoom(String roomName) {
+        log.info("roomName : {}", roomName);
         String randomId = UUID.randomUUID().toString();
         ChatRoom chatRoom = ChatRoom.builder()
                 .roomId(randomId)
                 .roomName(roomName)
                 .build();
+        log.info("방이 생성되었습니다. {}", chatRoom.toString());
         chatRooms.put(randomId, chatRoom);
         return chatRoom;
     }
@@ -50,6 +54,7 @@ public class ChatServiceImpl implements ChatService{
     public <T> void sendMessage(WebSocketSession session, T message) {
         try {
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+            log.info("정상적으로 메시지를 전송했습니다.");
         }
         catch (IOException e) {
             log.error(e.getMessage(), e);
