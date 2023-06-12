@@ -1,7 +1,7 @@
 package com.rwc.randomwordchat.model.chat.controller;
 
 import com.rwc.randomwordchat.model.chat.model.dto.ChatRoom;
-import com.rwc.randomwordchat.model.chat.model.service.ChatRepository;
+import com.rwc.randomwordchat.model.chat.model.service.ChatRoomRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
@@ -19,9 +19,9 @@ import java.util.Map;
 @Log4j2
 public class ChatRoomController {
 
-    private final ChatRepository repository;
+    private final ChatRoomRepository repository;
 
-    public ChatRoomController(ChatRepository repository) {
+    public ChatRoomController(ChatRoomRepository repository) {
         this.repository = repository;
     }
 
@@ -31,7 +31,7 @@ public class ChatRoomController {
     public ResponseEntity<List<ChatRoom>> findAllRoom() {
         List<ChatRoom> list = repository.findAllRoom();
         HttpStatus status = HttpStatus.ACCEPTED;
-        log.info("존재하는 모든 방을 찾았습니다.. {}", list.toString());
+        log.info("존재하는 모든 방을 찾았습니다. {}", list.toString());
         return new ResponseEntity<>(list, status);
     }
 
@@ -43,6 +43,25 @@ public class ChatRoomController {
         ChatRoom chatRoom = repository.createChatRoom(name);
         log.info("방이 정상적으로 생성됐습니다. {}", chatRoom);
         return chatRoom;
+    }
+
+    // 채팅방 제거
+    @Operation(summary = "채팅방 제거 메서드", description = "채팅방을 제거하는 메서드입니다.")
+    @GetMapping("/remove/{roomId}")
+    public ResponseEntity<Map<String, Object>> removeRoomById(@PathVariable String roomId) {
+        Map<String, Object> map = new HashMap<>();
+        boolean isRemoved = repository.removeChatRoom(roomId);
+        HttpStatus status = HttpStatus.NO_CONTENT;
+        if(isRemoved) {
+            map.put("remove_room", isRemoved);
+            log.info("방이 성공적으로 삭제되었습니다.");
+            status = HttpStatus.ACCEPTED;
+        }
+        else {
+            map.put("remove_room", isRemoved);
+            log.info("방 제거에 실패하였습니다.");
+        }
+        return new ResponseEntity<>(map, status);
     }
 
     // 채팅방 입장

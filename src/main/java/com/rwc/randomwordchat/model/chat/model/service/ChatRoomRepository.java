@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 @Repository
-public class ChatRepository {
+public class ChatRoomRepository {
 
     private Map<String, ChatRoom> chatRoomMap;
 
@@ -30,5 +30,13 @@ public class ChatRepository {
         ChatRoom chatRoom = ChatRoom.create(roomName);
         chatRoomMap.put(chatRoom.getRoomId(), chatRoom);
         return chatRoom;
+    }
+
+    public boolean removeChatRoom(String roomId) {
+        if(chatRoomMap.get(roomId).getRoomId().equals(roomId)) {
+            chatRoomMap.remove(roomId);
+            return true;
+        }
+        return false;
     }
 }
