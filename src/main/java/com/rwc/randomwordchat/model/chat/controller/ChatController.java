@@ -1,22 +1,25 @@
 package com.rwc.randomwordchat.model.chat.controller;
 
-import com.rwc.randomwordchat.model.chat.model.dto.ChatMessage;
+import com.rwc.randomwordchat.model.chat.model.dto.Chat;
+import com.rwc.randomwordchat.model.chatroom.model.mapper.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
-@RequiredArgsConstructor
 @Controller
+@RequiredArgsConstructor
 @Log4j2
 public class ChatController {
 
     private final SimpMessageSendingOperations messagingTemplate;
+    private final ChatRoomRepository chatRoomRepository;
 
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message) {
-        if("new".equals(message.getType())) {
+    public void message(Chat message) {
+        if(message.getType().equals(Chat.MessageType.ENTER)) {
             message.setMessage(message.getSender() + "님이 입장하셨습니다.");
             log.info(message.getSender() + "님이 입장하셨습니다.");
         }

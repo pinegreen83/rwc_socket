@@ -1,7 +1,7 @@
-package com.rwc.randomwordchat.model.chat.controller;
+package com.rwc.randomwordchat.model.chatroom.controller;
 
-import com.rwc.randomwordchat.model.chat.model.dto.ChatRoom;
-import com.rwc.randomwordchat.model.chat.model.service.ChatRoomRepository;
+import com.rwc.randomwordchat.model.chatroom.model.dto.ChatRoom;
+import com.rwc.randomwordchat.model.chatroom.model.mapper.ChatRoomRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
@@ -30,7 +30,7 @@ public class ChatRoomController {
     @GetMapping("/all")
     public ResponseEntity<List<ChatRoom>> findAllRoom() {
         List<ChatRoom> list = repository.findAllRoom();
-        HttpStatus status = HttpStatus.ACCEPTED;
+        HttpStatus status = HttpStatus.OK;
         log.info("존재하는 모든 방을 찾았습니다. {}", list.toString());
         return new ResponseEntity<>(list, status);
     }
@@ -51,11 +51,11 @@ public class ChatRoomController {
     public ResponseEntity<Map<String, Object>> removeRoomById(@PathVariable String roomId) {
         Map<String, Object> map = new HashMap<>();
         boolean isRemoved = repository.removeChatRoom(roomId);
-        HttpStatus status = HttpStatus.NO_CONTENT;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         if(isRemoved) {
             map.put("remove_room", isRemoved);
             log.info("방이 성공적으로 삭제되었습니다.");
-            status = HttpStatus.ACCEPTED;
+            status = HttpStatus.OK;
         }
         else {
             map.put("remove_room", isRemoved);
@@ -70,14 +70,14 @@ public class ChatRoomController {
     public ResponseEntity<Map<String, Object>> enterRoomById(@PathVariable String roomId) {
         Map<String, Object> map = new HashMap<>();
         ChatRoom chatRoom = repository.findRoomById(roomId);
-        HttpStatus status = HttpStatus.NO_CONTENT;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         if(chatRoom == null) {
             map.put("enter_room", null);
             log.info("방이 없습니다.");
         }
         else {
             map.put("enter_room", chatRoom);
-            status = HttpStatus.ACCEPTED;
+            status = HttpStatus.OK;
             log.info("정상적으로 방에 입장하였습니다.");
         }
         return new ResponseEntity<>(map, status);
@@ -89,14 +89,14 @@ public class ChatRoomController {
     public ResponseEntity<Map<String, Object>> findRoomById(@PathVariable String roomId) {
         Map<String, Object> map = new HashMap<>();
         ChatRoom chatRoom = repository.findRoomById(roomId);
-        HttpStatus status = HttpStatus.NO_CONTENT;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         if(chatRoom == null) {
             map.put("find_room", null);
             log.info("방이 존재하지 않습니다.");
         }
         else {
             map.put("find_room", chatRoom);
-            status = HttpStatus.ACCEPTED;
+            status = HttpStatus.OK;
             log.info("정상적으로 방이 존재함.");
         }
         return new ResponseEntity<>(map, status);
