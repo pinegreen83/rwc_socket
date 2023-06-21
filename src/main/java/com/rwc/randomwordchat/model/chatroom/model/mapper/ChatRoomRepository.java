@@ -57,17 +57,17 @@ public class ChatRoomRepository {
     }
 
     // 채팅방에 유저 추가
-    public boolean addUser(String roomId, String userName) {
+    public String addUser(String roomId, String userName) {
         ChatRoom room = chatRoomMap.get(roomId);
         String userUUID = UUID.randomUUID().toString();
 
         if(room.getUserList().containsKey(userUUID)) {
-            return false;
+            return null;
         }
 
         // 아이디 중복 확인 후 userList에 추가
         room.getUserList().put(userUUID, userName);
-        return true;
+        return userUUID;
     }
 
     // 채팅방 유저 이름 중복 확인

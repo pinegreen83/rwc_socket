@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Tag(name = "채팅방", description = "채팅방 관련 api입니다.")
-@RequestMapping("/api/chat")
+@RequestMapping("/api/chatroom")
 @RestController
 @Log4j2
 public class ChatRoomController {
